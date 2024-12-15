@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchusers() async {
-    const url = "https://randomuser.me/api/";
+    const url = "https://randomuser.me/api/?results=100";
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final body = response.body;
@@ -39,6 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         backgroundColor: Colors.red.shade300,
       ),
+      body: ListView.builder(itemCount: users.length, itemBuilder: (context, index) {
+        final user = users[index];
+        final email = user['email'];
+        return ListTile(
+          title: Text(email),
+        );
+
+      }),
     );
   }
 }

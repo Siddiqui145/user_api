@@ -42,8 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView.builder(itemCount: users.length, itemBuilder: (context, index) {
         final user = users[index];
         final email = user['email'];
+        final gender = user['gender'];
+        final phone = user['phone'];
+        final cell = user['cell'];
         return ListTile(
           title: Text(email),
+          subtitle: Text(gender),
+          leading: Text(phone),
+          trailing: Text(cell),
         );
 
       }),

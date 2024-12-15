@@ -33,22 +33,38 @@ class _HomeScreenState extends State<HomeScreen> {
        first: e['name']['first'] ?? 'N/A',
         last: e['name']['last'] ?? 'N/A');
 
-        final address1 = Street(number: e['location']['street']['number'],
+        final street = Street(number: e['location']['street']['number'].toString(),
          name: e['location']['street']['name']);
 
-      final address = Location(address: address1,
+         final coordinates = Coordinates(latitude: e['location']['coordinates']['latitude'], 
+         longitude: e['location']['coordinates']['longitude']);
+
+         final timezone = Timezone(description: e['location']['timezone']['description'].toString(),
+         offset: e['location']['timezone']['offset'].toString());
+
+      final location = Location(street: street,
+      coordinates: coordinates,
+      timezone: timezone,
        city: e['location']['city'],
         country: e['location']['country'],
          postcode: e['location']['postcode'],
           state: e['location']['state']);
 
+          final dob = Dob(date: DateTime.parse(e['dob']['date']),
+           age: e['dob']['age']);
+
+           final registered = Registered(date: DateTime.parse(e['registered']['date']), age: e['registered']['age']);
+           final picture = Picture(large: e['picture']['large'], medium: e['picture']['medium'], thumbnail: e['picture']['thumbnail']);
       return Data(
         email : e['email'],
         gender: e['gender'],
         phone: e['phone'],
         cell: e['cell'],
         name: name,
-        location: address,
+        location: location,
+        dob: dob,
+        registered: registered,
+        picture: picture,
       );
     }).toList();
 
@@ -72,16 +88,45 @@ class _HomeScreenState extends State<HomeScreen> {
         final gender = user.gender;
         final phone = user.phone;
         final cell = user.cell;
-        final name = user.name.last;
+        final fullName = user.fullName;
         final city = user.location.city;
+        final number = user.location.street.number;
+        final name = user.location.street.name;
+        final desc = user.location.timezone.description;
+        final age = user.dob.age;
+        final dob = user.dob.date;
+        final picture = user.picture.thumbnail;
+        
         return ListTile(
-          title: Text(email),
-          subtitle: Text(name),
-          leading: Text(phone),
-          trailing: Column(
+          leading: ClipRRect( 
+            //borderRadius: BorderRadius.circular(16),
+           // child: Text((index+1).toString()),
+           child: Image.network(picture),
+            ),
+
+            title: Text(fullName),
+            
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(cell),
-              Text(city),
+              SizedBox(height: 10,),
+              
+              Text("Gender => $gender"),
+              Text("Email => $email"),
+              Text("Age => $age"),
+              Text("DOB => $dob"),
+              Text("Ring on => $phone"),
+              Text("Cell Number => $cell"),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Street Number : $number"),
+                  Text("Street Name : $name")
+                ],
+              ),
+              Text("City => $city"),
+              Text("Description => $desc"),
+              const SizedBox(height: 25,)
             ],
           ),
           
